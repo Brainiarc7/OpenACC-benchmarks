@@ -46,6 +46,12 @@ PGF90 = pgf90 -acc -O3 -Minfo=accel -ta=nvidia:keep,cc$(GPUARCH),cuda$(GPUCUDA) 
 CAPSCC = hmpp --openacc-target=CUDA -k -f --nvcc-options -O3,-arch,sm_$(GPUARCH) gcc -O3 -D_GNU_SOURCE -std=c99 -Wl,--wrap=openacci_call -Wl,--wrap=dlsym
 CAPSF90 = hmpp --openacc-target=CUDA -k -f --nvcc-options -O3,-arch,sm_$(GPUARCH) gfortran -O3 $(szreal) -Wl,--wrap=openacci_call -Wl,--wrap=dlsym
 
+# PathScale/OpenACC compiler/linker options
+PATHCCPATH = /home/remixman/Desktop/pathscale/enzobuild/Xcompiler/bin/
+PATHCC_INCLUDE_PATH = /opt/enzo-4.9.02/include/4.9.02/
+PATHCC = $(PATHCCPATH)pathcc -acc -O3 -I$(PATHCC_INCLUDE_PATH)
+PATHF90 = $(PATHCCPATH)pathf90 -acc -O3 -I$(PATHCC_INCLUDE_PATH)
+
 # NVIDIA compile options
 NVCC = nvcc -O3
 

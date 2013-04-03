@@ -156,6 +156,18 @@ sub report_test
 		$kernel_time = find_average($output, "",
 			qr/$kernel_name\stime\s=\s([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?)\ssec/);
 	}
+	if ($target eq "pathscale")
+	{
+		my($joined_output) = $$output;
+		$joined_output =~ s/\n/ /g;
+		$joined_output =~ s/(avg=[0-9\,]+)/$1\n/g;
+		$joined_output =~ s/$name/\n$name/g;
+		$kernel_time = find_average(\$joined_output, "", qr/$name\s[^\n]*avg=([0-9\,]+)/);
+		if ($kernel_time ne "N/A")
+		{
+			$kernel_time = $kernel_time / 1e6;
+		}
+	}
 	if ($target eq "pgi")
 	{
 		my($joined_output) = $$output;
@@ -180,6 +192,18 @@ sub report_test
 	{
 		$kernel_nregs = find_average($output, "",
 			qr/$kernel_name\:\sregcount\s=\s([0-9]+)\,/);
+	}
+	if ($target eq "pathscale")
+	{
+		if ($$output =~ m/$name\s+NVIDIA\s+devicenum\=\d+\n\s*time\(us\)\:\s*[\d+|,]+\n\s*(?<LINENO>[0-9]+)\:\skernel\slaunched/xs)
+		{
+			my($lineno) = $+{LINENO};
+			my($kernel_name) = "$name\_$lineno\_gpu";
+			my($regcount_output) = join("",
+				`bash -c "cd $test && OPENACC_PROFILING_FNAME=$kernel_name OPENACC_PROFILING_LINENO=$lineno make test NX=$nx NY=$ny NS=$ns NT=$niters 2>&1"`);
+			$kernel_nregs = find_average(\$regcount_output, "",
+				qr/$kernel_name\:$lineno\sregcount\s=\s([0-9]+)/);
+		}
 	}
 	if ($target eq "pgi")
 	{
@@ -310,7 +334,7 @@ for ( ; $irun < $nruns; $irun++)
 	{
 		# If using one of known GPU-enabled targets, display
 		# the list of available GPUs.
-		if (grep( /^kernelgen$/, @targets) or grep( /^pgi$/, @targets) or grep( /^caps$/, @targets))
+		if (grep( /^kernelgen$/, @targets) or grep( /^pathscale$/, @targets) or grep( /^pgi$/, @targets) or grep( /^caps$/, @targets))
 		{
 			print "---- Using the following CUDA driver: ----\n";
 			my($nvidia_driver) = join("", `cat /proc/driver/nvidia/version`);
@@ -326,6 +350,13 @@ for ( ; $irun < $nruns; $irun++)
 				my($kernelgen_version) = `kernelgen-version`;
 				print "$kernelgen_version\n";
 				print "-------------------------------------------------\n\n";
+			}
+			if (grep( /^pathscale$/, @targets))
+			{
+				print "---- Using the following PathScale compiler: ----\n";
+				my($pathscale_version) = join("", `pathcc --version`);
+				print "$pathscale_version";
+				print "-------------------------------------------\n\n";
 			}
 			if (grep( /^pgi$/, @targets))
 			{
@@ -376,7 +407,7 @@ for ( ; $irun < $nruns; $irun++)
 			$target_name =~ s/\^.*//g;
 
 			# Skip some tests, depending on target.
-			if ((($target_name eq "kernelgen") or ($target_name eq "pgi") or ($target_name eq "caps")) and
+			if ((($target_name eq "kernelgen") or ($target_name eq "pathscale") or ($target_name eq "pgi") or ($target_name eq "caps")) and
 				(($file eq "tricubic2") or ($file eq "whispering")))
 			{
 				next;
@@ -452,7 +483,7 @@ if ($nruns != 1)
 			$target_name =~ s/\^.*//g;
 
 			# Skip some tests, depending on target.
-			if ((($target_name eq "kernelgen") or ($target_name eq "pgi") or ($target_name eq "caps")) and
+			if ((($target_name eq "kernelgen") or ($target_name eq "pathscale") or ($target_name eq "pgi") or ($target_name eq "caps")) and
 				(($file eq "tricubic2") or ($file eq "whispering")))
 			{
 				next;

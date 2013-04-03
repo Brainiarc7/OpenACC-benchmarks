@@ -37,6 +37,9 @@ TARGETS_KERNELGEN_CLEAN = $(addsuffix .kernelgen.clean, $(TARGETS))
 TARGETS_MIC = $(addsuffix .mic, $(TARGETS))
 TARGETS_MIC_CLEAN = $(addsuffix .mic.clean, $(TARGETS))
 
+TARGETS_PATHSCALE = $(addsuffix .pathscale, $(TARGETS))
+TARGETS_PATHSCALE_CLEAN = $(addsuffix .pathscale.clean, $(TARGETS))
+
 TARGETS_PGI = $(addsuffix .pgi, $(TARGETS))
 TARGETS_PGI_CLEAN = $(addsuffix .pgi.clean, $(TARGETS))
 
@@ -48,7 +51,7 @@ TARGETS_PATUS_CLEAN = $(addsuffix .patus.clean, $(TARGETS))
 
 .PHONY: all
 
-all: gcc kernelgen mic pgi caps
+all: gcc kernelgen mic pathscale pgi caps
 
 gcc: $(TARGETS_GCC)
 
@@ -56,13 +59,15 @@ kernelgen: $(TARGETS_KERNELGEN)
 
 mic: $(TARGETS_MIC)
 
+pathscale: $(TARGETS_PATHSCALE)
+
 pgi: $(TARGETS_PGI)
 
 caps: $(TARGETS_CAPS)
 
 patus: $(TARGETS_PATUS)
 
-clean: $(TARGETS_GCC_CLEAN) $(TARGETS_KERNELGEN_CLEAN) $(TARGETS_MIC_CLEAN) $(TARGETS_PGI_CLEAN) $(TARGETS_CAPS_CLEAN) $(TARGETS_PATUS_CLEAN)
+clean: $(TARGETS_GCC_CLEAN) $(TARGETS_KERNELGEN_CLEAN) $(TARGETS_MIC_CLEAN) $(TARGETS_PATHSCALE_CLEAN) $(TARGETS_PGI_CLEAN) $(TARGETS_CAPS_CLEAN) $(TARGETS_PATUS_CLEAN)
 
 %.gcc:
 	$(SILENT)cd $(subst .gcc,,$@)/gcc && $(MAKE)
@@ -81,6 +86,12 @@ clean: $(TARGETS_GCC_CLEAN) $(TARGETS_KERNELGEN_CLEAN) $(TARGETS_MIC_CLEAN) $(TA
 
 %.mic.clean:
 	$(SILENT)cd $(subst .mic.clean,,$@)/mic && $(MAKE) clean
+
+%.pathscale:
+	$(SILENT)cd $(subst .pathscale,,$@)/pathscale && $(MAKE)
+
+%.pathscale.clean:
+	$(SILENT)cd $(subst .pathscale.clean,,$@)/pathscale && $(MAKE) clean
 
 %.pgi:
 	$(SILENT)cd $(subst .pgi,,$@)/pgi && $(MAKE)
@@ -108,6 +119,9 @@ test.kernelgen: $(TARGETS_KERNELGEN)
 
 test.mic: $(TARGETS_MIC)
 	$(SILENT)./benchmark $(NX) $(NY) $(NS) $(NT) $(NRUNS) mic
+
+test.pathscale: $(TARGETS_PATHSCALE)
+	$(SILENT)./benchmark $(NX) $(NY) $(NS) $(NT) $(NRUNS) pathscale
 
 test.pgi: $(TARGETS_PGI)
 	$(SILENT)./benchmark $(NX) $(NY) $(NS) $(NT) $(NRUNS) pgi
