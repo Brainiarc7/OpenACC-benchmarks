@@ -24,9 +24,6 @@ real ?= float
 PATHCC = $(PATHCCPATH)pathcc -acc -O3 -I. -I$(PATHCC_INCLUDE_PATH)
 PATHF90 = $(PATHCCPATH)pathf90 -acc -O3 -I$(PATHCC_INCLUDE_PATH)
 
-# NVIDIA compile options
-NVCC ?= nvcc -O3
-
 # Default problem domain dimensions
 NX ?= 512
 NY ?= 256
@@ -35,7 +32,7 @@ NS ?= 256
 all: divergence
 
 divergence: divergence.o timing.o openacc_profiling.o
-	$(SILENT)$(PATHCC) $^ -o $@ -lrt -L$(shell dirname $(shell which nvcc))/../lib64 -lcudart -lcuda -lstdc++ -lgcc_s
+	$(SILENT)$(PATHCC) $^ -o $@ -lrt
 
 divergence.o: ../divergence.c ../timing.h openacc_profiling.h
 	$(SILENT)$(PATHCC) -Dreal=$(real) -c $< -o $@
@@ -43,8 +40,8 @@ divergence.o: ../divergence.c ../timing.h openacc_profiling.h
 timing.o: ../timing.c ../timing.h
 	$(SILENT)$(PATHCC) -c $< -o $@
 
-openacc_profiling.o: openacc_profiling.cu openacc_profiling.h
-	$(SILENT)$(NVCC) -c $< -o $@
+openacc_profiling.o: openacc_profiling.c openacc_profiling.h
+	$(SILENT)$(PATHCC) -c $< -o $@
 
 clean:
 	$(SILENT)rm -rf *.o divergence *.ptx *.gpu *.bin

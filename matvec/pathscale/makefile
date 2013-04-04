@@ -24,9 +24,6 @@ real ?= float
 PATHCC = $(PATHCCPATH)pathcc -acc -O3 -I. -I$(PATHCC_INCLUDE_PATH)
 PATHF90 = $(PATHCCPATH)pathf90 -acc -O3 -I$(PATHCC_INCLUDE_PATH)
 
-# NVIDIA compile options
-NVCC ?= nvcc -O3
-
 # Default problem domain dimensions
 NX ?= 512
 NY ?= 256
@@ -34,16 +31,16 @@ NY ?= 256
 all: matvec
 
 matvec: matvec.o timing.o openacc_profiling.o
-	$(SILENT)$(PGCC) $^ -o $@ -lrt -L$(shell dirname $(shell which nvcc))/../lib64 -lcudart -lcuda -lstdc++ -lgcc_s
+	$(SILENT)$(PATHCC) $^ -o $@ -lrt
 
 matvec.o: ../matvec.c ../timing.h
-	$(SILENT)$(PGCC) -Dreal=$(real) -c $< -o $@
+	$(SILENT)$(PATHCC) -Dreal=$(real) -c $< -o $@
 
 timing.o: ../timing.c ../timing.h
-	$(SILENT)$(PGCC) -c $< -o $@
+	$(SILENT)$(PATHCC) -c $< -o $@
 
-openacc_profiling.o: openacc_profiling.cu
-	$(SILENT)$(NVCC) -c $< -o $@
+openacc_profiling.o: openacc_profiling.c
+	$(SILENT)$(PATHCC) -c $< -o $@
 
 clean:
 	$(SILENT)rm -rf *.o matvec *.ptx *.gpu *.bin

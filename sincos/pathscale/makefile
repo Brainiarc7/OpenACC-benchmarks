@@ -28,9 +28,6 @@ endif
 PATHCC = $(PATHCCPATH)pathcc -acc -O3 -I. -I$(PATHCC_INCLUDE_PATH)
 PATHF90 = $(PATHCCPATH)pathf90 -acc -O3 -I$(PATHCC_INCLUDE_PATH)
 
-# NVIDIA compile options
-NVCC ?= nvcc -O3
-
 # Default problem domain dimensions
 NX ?= 512
 NY ?= 256
@@ -39,7 +36,7 @@ NS ?= 256
 all: sincos
 
 sincos: main.o sincos.o timing.o openacc_profiling.o
-	$(SILENT)$(PATHF90) -Mnomain $^ -o $@ -lrt -L$(shell dirname $(shell which nvcc))/../lib64 -lcudart -lcuda -lstdc++ -lgcc_s
+	$(SILENT)$(PATHF90) -Mnomain $^ -o $@ -lrt
 
 main.o: ../main.c ../timing.h
 	$(SILENT)$(PATHCC) -Dreal=$(real) -c $< -o $@
@@ -50,12 +47,11 @@ sincos.o: ../sincos.F90
 timing.o: ../timing.c ../timing.h
 	$(SILENT)$(PATHCC) -c $< -o $@
 
-openacc_profiling.o: openacc_profiling.cu
-	$(SILENT)$(NVCC) -c $< -o $@
+openacc_profiling.o: openacc_profiling.c
+	$(SILENT)$(PATHCC) -c $< -o $@
 
 clean:
 	$(SILENT)rm -rf *.o sincos *.ptx *.gpu *.bin
 
 test: sincos
 	$(SILENT)ACC_TIME=1 ./$< $(NX) $(NY) $(NS) $(NT)
-
