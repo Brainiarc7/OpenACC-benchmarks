@@ -42,6 +42,10 @@ int whispering(int nx, int ny,
 	real* e0[2], real* e1[2], real* h0, real* h1, real* u_em0, real* u_em1,
 	real* ca, real* cb, real* da, real* db)
 {
+	real *e0_0 = NULL;
+	real *e0_1 = NULL;
+	real *e1_0 = NULL;
+	real *e1_1 = NULL;
 #if defined(_PATUS)
 	real *dummy1, *dummy2, *dummy3, *dummy4;
 	#pragma omp parallel
@@ -51,7 +55,9 @@ int whispering(int nx, int ny,
 #else
 #if defined(_OPENACC)
 	size_t szarray = (size_t)nx * ny;
-	#pragma acc kernels loop independent gang(65535), present(e0[0:1][0:szarray], e0[1][0:szarray])
+	e0_0 = e0[0];
+	e0_1 = e0[1];
+	#pragma acc kernels loop independent gang(65535), present(e0_0[0:szarray], e0_1[0:szarray])
 //		e1[0][0:szarray], e1[1][0:szarray], h0[0:szarray], h1[0:szarray], \
 //		u_em0[0:szarray])
 // u_em1[0:szarray], ca[0:szarray], cb[0:szarray], da[0:szarray], db[0:szarray])
@@ -144,6 +150,10 @@ int main(int argc, char* argv[])
 	real* cb = (real*)memalign(MEMALIGN, szarrayb);
 	real* da = (real*)memalign(MEMALIGN, szarrayb);
 	real* db = (real*)memalign(MEMALIGN, szarrayb);
+	real *e0_0 = NULL;
+	real *e0_1 = NULL;
+	real *e1_0 = NULL;
+	real *e1_1 = NULL;
 
 	if (!e0[0] || !e0[1] || !e1[0] || !e1[1] || !h0 || !h1 || !u_em0 || !u_em1 || !ca || !cb || !da || !db)
 	{
@@ -234,7 +244,9 @@ int main(int argc, char* argv[])
 #endif
 #if defined(_OPENACC)
 	get_time(&alloc_s);
-	#pragma acc declare create (e0[2][0:szarray], e1[2][0:szarray], h0[0:szarray], h1[0:szarray], u_em0[0:szarray], u_em1[0:szarray], ca[0:szarray], cb[0:szarray], da[0:szarray], db[0:szarray])
+	e0_1 = e0[1];
+	e1_1 = e1[1];
+	#pragma acc declare create (e0_1[0:szarray], e1_1[0:szarray], h0[0:szarray], h1[0:szarray], u_em0[0:szarray], u_em1[0:szarray], ca[0:szarray], cb[0:szarray], da[0:szarray], db[0:szarray])
 	get_time(&alloc_f);
 #endif
 	double alloc_t = get_time_diff((struct timespec*)&alloc_s, (struct timespec*)&alloc_f);
@@ -269,7 +281,9 @@ int main(int argc, char* argv[])
 #endif
 #if defined(_OPENACC)
 	get_time(&load_s);
-	#pragma acc update device(e0[2][0:szarray], e1[2][0:szarray], h0[0:szarray], h1[0:szarray], u_em0[0:szarray], u_em1[0:szarray], ca[0:szarray], cb[0:szarray], da[0:szarray], db[0:szarray])
+	e0_1 = e0[1];
+	e1_1 = e1[1];
+	#pragma acc update device(e0_1[0:szarray], e1_1[0:szarray], h0[0:szarray], h1[0:szarray], u_em0[0:szarray], u_em1[0:szarray], ca[0:szarray], cb[0:szarray], da[0:szarray], db[0:szarray])
 	get_time(&load_f);
 #endif
 	double load_t = get_time_diff((struct timespec*)&load_s, (struct timespec*)&load_f);
@@ -351,7 +365,9 @@ int main(int argc, char* argv[])
 #endif
 #if defined(_OPENACC)
 	get_time(&save_s);
-	#pragma acc update host (e0[2][0:szarray], e1[2][0:szarray], h0[0:szarray], h1[0:szarray], u_em0[0:szarray], u_em1[0:szarray], ca[0:szarray], cb[0:szarray], da[0:szarray], db[0:szarray])
+	e0_1 = e0[1];
+	e1_1 = e1[1];
+	#pragma acc update host (e0_1[0:szarray], e1_1[0:szarray], h0[0:szarray], h1[0:szarray], u_em0[0:szarray], u_em1[0:szarray], ca[0:szarray], cb[0:szarray], da[0:szarray], db[0:szarray])
 	get_time(&save_f);
 #endif
 	double save_t = get_time_diff((struct timespec*)&save_s, (struct timespec*)&save_f);
