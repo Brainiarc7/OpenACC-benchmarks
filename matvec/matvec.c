@@ -160,7 +160,8 @@ int main(int argc, char* argv[])
 #endif
 #if defined(_OPENACC)
 	get_time(&alloc_s);
-	#pragma acc declare create (A[0:nx*ny], x[0:nx], y[0:ny])
+	#pragma acc data create (A[0:nx*ny], x[0:nx], y[0:ny])
+	{
 	get_time(&alloc_f);
 #endif
 	double alloc_t = get_time_diff((struct timespec*)&alloc_s, (struct timespec*)&alloc_f);
@@ -243,6 +244,9 @@ int main(int argc, char* argv[])
 	// 6) Deallocate device data buffers.
 	// OPENACC does not seem to have explicit deallocation.
 	//
+#if defined(_OPENACC)
+	}
+#endif
 #if defined(_MIC)
 	volatile struct timespec free_s, free_f;
 	get_time(&free_s);
