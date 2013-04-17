@@ -15,6 +15,7 @@
 #include "timing.h"
 
 #if defined(_OPENACC)
+#include <openacc.h>
 #include "openacc_profiling.h"
 #endif
 
