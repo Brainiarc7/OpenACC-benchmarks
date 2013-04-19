@@ -42,7 +42,7 @@ main.o: ../main.c ../timing.h
 	$(SILENT)$(PATHCC) -Dreal=$(real) -c $< -o $@
 
 jacobi.o: ../jacobi.F90
-	$(SILENT)$(PATHF90) -c $< -o $@
+	$(SILENT)$(PATHF90) $(pgi_szreal) -c $< -o $@
 
 timing.o: ../timing.c ../timing.h
 	$(SILENT)$(PATHCC) -c $< -o $@

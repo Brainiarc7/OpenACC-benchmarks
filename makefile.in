@@ -47,8 +47,9 @@ CAPSCC = hmpp --openacc-target=CUDA -k -f --nvcc-options -O3,-arch,sm_$(GPUARCH)
 CAPSF90 = hmpp --openacc-target=CUDA -k -f --nvcc-options -O3,-arch,sm_$(GPUARCH) gfortran -O3 $(szreal) -Wl,--wrap=openacci_call -Wl,--wrap=dlsym
 
 # PathScale/OpenACC compiler/linker options
-PATHCCPATH = /home/remixman/Desktop/pathscale/enzobuild/Xcompiler/bin/
-PATHCC_INCLUDE_PATH = /opt/enzo-4.9.02/include/4.9.02/
+PATHHOME = /home/wwa/enzo/xacc/debug/Xcompiler/
+PATHCCPATH = $(PATHHOME)bin/
+PATHCC_INCLUDE_PATH = $(PATHHOME)include/
 PATHCC = $(PATHCCPATH)pathcc -acc -O3 -I$(PATHCC_INCLUDE_PATH)
 PATHF90 = $(PATHCCPATH)pathf90 -acc -O3 -I$(PATHCC_INCLUDE_PATH)
 
