@@ -18,8 +18,8 @@ SILENT =
 endif
 
 # PathScale/OpenACC compiler/linker options
-PATHCC = $(PATHCCPATH)pathcc -acc -O3 -I. -I$(PATHCC_INCLUDE_PATH)
-PATHF90 = $(PATHCCPATH)pathf90 -acc -O3 -I$(PATHCC_INCLUDE_PATH)
+PATHCC = $(PATHCCPATH)pathcc $(PATHCCAPI) -O3 -I. -I$(PATHCC_INCLUDE_PATH)
+PATHF90 = $(PATHCCPATH)pathf90 $(PATHCCAPI) -O3 -I$(PATHCC_INCLUDE_PATH)
 
 # Floating-point type: float or double
 real ?= float

@@ -50,8 +50,9 @@ CAPSF90 = hmpp --openacc-target=CUDA -k -f --nvcc-options -O3,-arch,sm_$(GPUARCH
 PATHHOME ?= /home/wwa/enzo/xacc/debug/Xcompiler/
 PATHCCPATH = $(PATHHOME)bin/
 PATHCC_INCLUDE_PATH = $(PATHHOME)include/
-PATHCC = $(PATHCCPATH)pathcc -acc -O3 -I$(PATHCC_INCLUDE_PATH)
-PATHF90 = $(PATHCCPATH)pathf90 -acc -O3 -I$(PATHCC_INCLUDE_PATH)
+PATHCCAPI  = -acc
+PATHCC = $(PATHCCPATH)pathcc $(PATHCCAPI) -O3 -I$(PATHCC_INCLUDE_PATH)
+PATHF90 = $(PATHCCPATH)pathf90 $(PATHCCAPI) -O3 -I$(PATHCC_INCLUDE_PATH)
 
 # NVIDIA compile options
 NVCC = nvcc -O3
