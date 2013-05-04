@@ -257,8 +257,6 @@ int main(int argc, char* argv[])
 	if (!no_timing) printf("data save time = %f sec (%f GB/sec)\n", save_t, szarrayb / (save_t * 1024 * 1024 * 1024));
 #endif
 
-	volatile struct timespec total_s, total_f;
-	get_time(&total_s);
 	//
 	// MIC or OPENACC:
 	//
