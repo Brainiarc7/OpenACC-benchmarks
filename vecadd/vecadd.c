@@ -144,6 +144,8 @@ int main(int argc, char* argv[])
 	if (!no_timing) printf("init time = %f sec\n", init_t);
 #endif
 
+	volatile struct timespec total_s, total_f;
+	get_time(&total_s);
 	//
 	// MIC or OPENACC:
 	//
@@ -222,6 +224,9 @@ int main(int argc, char* argv[])
 	get_time(&compute_f);
 	double compute_t = get_time_diff((struct timespec*)&compute_s, (struct timespec*)&compute_f);
 	if (!no_timing) printf("compute time = %f sec\n", compute_t);
+
+	get_time(&total_f);
+	if (!no_timing) printf("total exec time = %f sec\n", get_time_diff((struct timespec*)&total_s, (struct timespec*)&total_f));
 
 	// For the final mean - account only the norm of the top
 	// most level (tracked by swapping idxs array of indexes).
