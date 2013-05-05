@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
 #endif
 #if defined(_OPENACC)
 	get_time(&init_s);
-	acc_init(acc_device_gpu);
+	acc_init(acc_device_default);
 	get_time(&init_f);
 #endif
 	double init_t = get_time_diff((struct timespec*)&init_s, (struct timespec*)&init_f);
