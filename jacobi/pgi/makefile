@@ -27,8 +27,8 @@ endif
 # PGI/OpenACC compiler/linker options
 GPUARCH ?= 20
 GPUCUDA ?= 5.0
-PGCC = pgcc -I. -acc -O3 -Minfo=accel -ta=nvidia:keep,cc$(GPUARCH),cuda$(GPUCUDA) -Wl,--wrap=__pgi_uacc_cuda_launch
-PGF90 = pgf90 -acc -O3 -Minfo=accel -ta=nvidia:keep,cc$(GPUARCH),cuda$(GPUCUDA) -Wl,--wrap=__pgi_uacc_cuda_launch $(pgi_szreal)
+PGCC = pgcc -I. -acc -O3 -Minfo=accel -ta=nvidia:keep,cc$(GPUARCH),cuda$(GPUCUDA)
+PGF90 = pgf90 -acc -O3 -Minfo=accel -ta=nvidia:keep,cc$(GPUARCH),cuda$(GPUCUDA) $(pgi_szreal)
 
 # NVIDIA compile options
 NVCC = nvcc -O3

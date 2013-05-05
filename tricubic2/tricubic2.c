@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
 		int lineno = -1;
 		if (regcount_lineno)
 			lineno = atoi(regcount_lineno);
-		kernelgen_enable_openacc_regcount(regcount_fname, lineno);
+		//kernelgen_enable_openacc_regcount(regcount_fname, lineno);
 	}
 #endif
 
