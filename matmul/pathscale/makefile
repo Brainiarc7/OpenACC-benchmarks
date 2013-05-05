@@ -35,7 +35,7 @@ NS ?= 256
 
 all: matmul
 
-matmul: main.o matmul.o timing.o openacc_profiling.o
+matmul: main.o matmul.o timing.o # openacc_profiling.o
 	$(SILENT)$(PATHCC) $^ -o $@ -lrt
 
 main.o: ../main.c ../timing.h

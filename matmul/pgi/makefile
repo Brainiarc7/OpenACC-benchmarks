@@ -40,7 +40,7 @@ NS ?= 256
 
 all: matmul
 
-matmul: main.o matmul.o timing.o openacc_profiling.o
+matmul: main.o matmul.o timing.o # openacc_profiling.o
 	$(SILENT)$(PGF90) -Mnomain $^ -o $@ -lrt -L$(shell dirname $(shell which nvcc))/../lib64 -lcudart -lcuda -lstdc++ -lgcc_s
 
 main.o: ../main.c ../timing.h

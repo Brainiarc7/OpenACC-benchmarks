@@ -36,7 +36,7 @@ NS ?= 256
 
 all: gradient
 
-gradient: gradient.o timing.o openacc_profiling.o
+gradient: gradient.o timing.o # openacc_profiling.o
 	$(SILENT)$(CAPSCC) $^ -o $@ -lrt -L$(shell dirname $(shell which nvcc))/../lib64 -lcudart -lcuda -ldl
 
 gradient.o: ../gradient.c ../timing.h

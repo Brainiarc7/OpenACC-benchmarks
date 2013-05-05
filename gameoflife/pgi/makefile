@@ -36,7 +36,7 @@ NS ?= 256
 
 all: gameoflife
 
-gameoflife: gameoflife.o timing.o openacc_profiling.o
+gameoflife: gameoflife.o timing.o # openacc_profiling.o
 	$(SILENT)$(PGCC) $^ -o $@ -lrt -L$(shell dirname $(shell which nvcc))/../lib64 -lcudart -lcuda -lstdc++ -lgcc_s
 
 gameoflife.o: ../gameoflife.c ../timing.h

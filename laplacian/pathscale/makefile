@@ -31,7 +31,7 @@ NS ?= 256
 
 all: laplacian
 
-laplacian: laplacian.o timing.o openacc_profiling.o
+laplacian: laplacian.o timing.o # openacc_profiling.o
 	$(SILENT)$(PATHCC) $^ -o $@ -lrt
 
 laplacian.o: ../laplacian.c ../timing.h

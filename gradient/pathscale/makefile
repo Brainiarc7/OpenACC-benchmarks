@@ -31,7 +31,7 @@ NS ?= 256
 
 all: gradient
 
-gradient: gradient.o timing.o openacc_profiling.o
+gradient: gradient.o timing.o # openacc_profiling.o
 	$(SILENT)$(PATHCC) $^ -o $@ -lrt
 
 gradient.o: ../gradient.c ../timing.h

@@ -35,7 +35,7 @@ NS ?= 256
 
 all: jacobi
 
-jacobi: main.o jacobi.o timing.o openacc_profiling.o
+jacobi: main.o jacobi.o timing.o # openacc_profiling.o
 	$(SILENT)$(PATHCC) $^ -o $@ -lrt
 
 main.o: ../main.c ../timing.h

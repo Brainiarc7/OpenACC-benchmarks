@@ -31,7 +31,7 @@ NS ?= 256
 
 all: divergence
 
-divergence: divergence.o timing.o openacc_profiling.o
+divergence: divergence.o timing.o # openacc_profiling.o
 	$(SILENT)$(PATHCC) $^ -o $@ -lrt
 
 divergence.o: ../divergence.c ../timing.h openacc_profiling.h

@@ -36,7 +36,7 @@ NS ?= 256
 
 all: lapgsrb
 
-lapgsrb: lapgsrb.o timing.o openacc_profiling.o
+lapgsrb: lapgsrb.o timing.o # openacc_profiling.o
 	$(SILENT)$(PGCC) $^ -o $@ -lrt -L$(shell dirname $(shell which nvcc))/../lib64 -lcudart -lcuda -lstdc++ -lgcc_s
 
 lapgsrb.o: ../lapgsrb.c ../timing.h

@@ -31,7 +31,7 @@ NS ?= 256
 
 all: lapgsrb
 
-lapgsrb: lapgsrb.o timing.o openacc_profiling.o
+lapgsrb: lapgsrb.o timing.o # openacc_profiling.o
 	$(SILENT)$(PATHCC) $^ -o $@ -lrt
 
 lapgsrb.o: ../lapgsrb.c ../timing.h

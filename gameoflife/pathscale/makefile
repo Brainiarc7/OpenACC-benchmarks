@@ -31,7 +31,7 @@ NS ?= 256
 
 all: gameoflife
 
-gameoflife: gameoflife.o timing.o openacc_profiling.o
+gameoflife: gameoflife.o timing.o # openacc_profiling.o
 	$(SILENT)$(PATHCC) $^ -o $@ -lrt
 
 gameoflife.o: ../gameoflife.c ../timing.h

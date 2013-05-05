@@ -31,7 +31,7 @@ NS ?= 256
 
 all: gaussblur
 
-gaussblur: gaussblur.o timing.o openacc_profiling.o
+gaussblur: gaussblur.o timing.o # openacc_profiling.o
 	$(SILENT)$(PATHCC) $^ -o $@ -lrt
 
 gaussblur.o: ../gaussblur.c ../timing.h

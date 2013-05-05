@@ -35,7 +35,7 @@ NY ?= 256
 
 all: matvec
 
-matvec: matvec.o timing.o openacc_profiling.o
+matvec: matvec.o timing.o # openacc_profiling.o
 	$(SILENT)$(PGCC) $^ -o $@ -lrt -L$(shell dirname $(shell which nvcc))/../lib64 -lcudart -lcuda -lstdc++ -lgcc_s
 
 matvec.o: ../matvec.c ../timing.h

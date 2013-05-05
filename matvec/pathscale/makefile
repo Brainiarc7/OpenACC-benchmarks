@@ -30,7 +30,7 @@ NY ?= 256
 
 all: matvec
 
-matvec: matvec.o timing.o openacc_profiling.o
+matvec: matvec.o timing.o # openacc_profiling.o
 	$(SILENT)$(PATHCC) $^ -o $@ -lrt
 
 matvec.o: ../matvec.c ../timing.h
