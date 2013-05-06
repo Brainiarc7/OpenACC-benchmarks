@@ -226,7 +226,7 @@ int main(int argc, char* argv[])
 	if (!no_timing) printf("compute time = %f sec\n", compute_t);
 
 	get_time(&total_f);
-	if (!no_timing) printf("total exec time = %f sec\n", get_time_diff((struct timespec*)&total_s, (struct timespec*)&total_f));
+	if (!no_timing) printf("device buffer free time = %f sec\n", get_time_diff((struct timespec*)&total_s, (struct timespec*)&total_f));
 
 	// For the final mean - account only the norm of the top
 	// most level (tracked by swapping idxs array of indexes).
@@ -276,7 +276,7 @@ int main(int argc, char* argv[])
 	{ }
 	get_time(&free_f);
 	double free_t = get_time_diff((timepsec&)free_s, (timepsec&)free_f);
-	if (!no_timing) printf("device buffer free time = %f sec\n", free_t);
+	// if (!no_timing) printf("device buffer free time = %f sec\n", free_t);
 #endif
 
 	for (int i = 0; i < szarray; i++)

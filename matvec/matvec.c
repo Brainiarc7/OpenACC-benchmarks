@@ -259,11 +259,11 @@ int main(int argc, char* argv[])
 	{ }
 	get_time(&free_f);
 	double free_t = get_time_diff((timepsec&)free_s, (timepsec&)free_f);
-	if (!no_timing) printf("device buffer free time = %f sec\n", free_t);
+	// if (!no_timing) printf("device buffer free time = %f sec\n", free_t);
 #endif
 
 	get_time(&total_f);
-	if (!no_timing) printf("total exec time = %f sec\n", get_time_diff((struct timespec*)&total_s, (struct timespec*)&total_f));
+	if (!no_timing) printf("device buffer free time = %f sec\n", get_time_diff((struct timespec*)&total_s, (struct timespec*)&total_f));
 
 	ymean = 0.0f;
 	for (int i = 0; i < ny; i++)
